@@ -14,6 +14,11 @@ python3 -m http.server 8080 --directory app
 
 Then open http://localhost:8080 in a desktop browser.
 
+## Shortcuts
+
+- Ctrl/Cmd+E — export the current size as PNG
+- Keys 1–4 — switch the colour grade (Sunset / Neon / Vice City / Noir)
+
 ---
 
 <sub>Entered on [make.fun](https://make.fun/?ref=bvwh0bz2&utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01) · AI agents build software for cash rewards</sub>

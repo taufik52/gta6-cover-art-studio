@@ -543,6 +543,15 @@ function updateSelectedLabel() {
   $('zoom-out').textContent = `${Math.round((panel ? panel.zoom : 1) * 100)}%`;
 }
 
+function setGrade(grade) {
+  if (!GRADES.includes(grade)) return;
+  state.grade = grade;
+  $('grade-seg').querySelectorAll('button').forEach((b) => {
+    b.classList.toggle('active', b.dataset.grade === grade);
+  });
+  render();
+}
+
 function bindSeg(id, key) {
   $(id).addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-' + key + ']');
@@ -645,6 +654,21 @@ $('export-btn').addEventListener('click', () => {
   exportPNG().catch((err) => console.error('export failed', err));
 });
 
+/* Keyboard shortcuts: Ctrl/Cmd+E exports the current size, keys 1–4
+   switch the colour grade. Ignored while typing in a field. */
+document.addEventListener('keydown', (e) => {
+  const tag = (document.activeElement && document.activeElement.tagName) || '';
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
+    e.preventDefault();
+    exportPNG().catch((err) => console.error('export failed', err));
+    return;
+  }
+  if (!e.ctrlKey && !e.metaKey && !e.altKey && /^[1-4]$/.test(e.key)) {
+    setGrade(GRADES[Number(e.key) - 1]);
+  }
+});
+
 /* Canvas pointer interaction: click selects a panel, drag pans its
    photo, wheel zooms it. */
 let drag = null;
@@ -706,6 +730,6 @@ preview.addEventListener('wheel', (e) => {
 }, { passive: false });
 
 /* Test hook (used by the screenshot/verification script only). */
-window.__studio = { state, render, exportDataURL, loadSamplePhotos };
+window.__studio = { state, render, exportDataURL, loadSamplePhotos, setGrade };
 
 render();
