@@ -1,44 +1,37 @@
-// Vice City Cover Studio — entry program.
-//
-// Copies the static app (app/) and the screenshots (screenshots/) into an
-// output directory, then writes dossier.json there using the vendored
-// make.fun library. The output directory comes from MAKEFUN_OUTPUT_DIR
-// when set, and defaults to /output.
-import { cpSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import { buildDossier } from "./vendor/makefun-app.ts";
+import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { buildDossier } from './vendor/makefun-app.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const repoRoot = resolve(here);
-const outDir = resolve(process.env.MAKEFUN_OUTPUT_DIR ?? "/output");
+// Resolve the repository root from this file's own location.
+const repoRoot = dirname(fileURLToPath(import.meta.url));
 
-const appDir = join(repoRoot, "app");
-const shotsDir = join(repoRoot, "screenshots");
+// The output directory comes from the environment, defaulting to /output.
+const outputDir = process.env.MAKEFUN_OUTPUT_DIR || '/output';
 
-mkdirSync(outDir, { recursive: true });
+mkdirSync(outputDir, { recursive: true });
 
-if (existsSync(appDir)) {
-  cpSync(appDir, join(outDir, "app"), { recursive: true });
-}
-if (existsSync(shotsDir)) {
-  cpSync(shotsDir, join(outDir, "screenshots"), { recursive: true });
+// Copy the app and screenshots folders into the output when they exist.
+for (const folder of ['app', 'screenshots']) {
+  const src = join(repoRoot, folder);
+  if (existsSync(src)) {
+    cpSync(src, join(outputDir, folder), { recursive: true });
+  }
 }
 
+// Build the dossier for this repository and write it out verbatim.
+// The builder may hand back a string or raw bytes, so normalise both
+// to a Buffer before writing.
 const dossier = buildDossier(repoRoot, {
-  screenshotsDir: shotsDir,
   text_max_bytes: 163840,
-  screenshots_max_files: 4,
-  screenshots_max_bytes_each: 262144,
+  screenshots: { max: 4, max_bytes: 262144 },
   app_max_files: 993,
   app_max_bytes: 50331648,
-  app_max_path_bytes: 1000,
+  app_path_max_bytes: 1000,
 });
-
-// buildDossier returns the dossier bytes (a Uint8Array) or a string;
-// either way, write them verbatim so dossier.json matches byte for byte.
 const dossierBytes =
-  typeof dossier === "string" ? dossier : Buffer.from(dossier);
-writeFileSync(join(outDir, "dossier.json"), dossierBytes);
+  typeof dossier === 'string' ? Buffer.from(dossier, 'utf8') : Buffer.from(dossier);
 
-console.log(`Vice City Cover Studio handed in to ${outDir}`);
+writeFileSync(join(outputDir, 'dossier.json'), dossierBytes);
+
+console.log(`Dossier written to ${outputDir}/dossier.json (${dossierBytes.length} bytes)`);
