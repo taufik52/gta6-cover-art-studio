@@ -1,117 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vice City Cover Studio — GTA-style cover art maker</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vice City Cover Studio — GTA-style cover art maker</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar">
-  <div class="brand">
-    <span class="brand-mark">VC</span>
-    <div>
-      <h1>Vice City Cover Studio</h1>
-      <p>Turn any photo into a sunset-neon poster cover. 100% offline — your photos never leave this page.</p>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">VC</span>
+      <div class="brand-text">
+        <h1>Vice City Cover Studio</h1>
+        <p>Turn any photo into a sunset-neon poster cover. 100% offline — your photos never leave this page.</p>
+      </div>
     </div>
-  </div>
-  <div class="top-actions">
-    <label class="btn btn-primary" for="file-input">+ Add photos</label>
-    <input id="file-input" type="file" accept="image/*" multiple hidden>
-    <button id="samples-btn" class="btn" type="button">Load sample photos</button>
-    <button id="fill-all-btn" class="btn" type="button">Fill all panels</button>
-  </div>
-</header>
-
-<main class="layout">
-  <section class="preview-col">
-    <div class="canvas-wrap">
-      <canvas id="preview" width="960" height="540"></canvas>
-      <p id="panel-hint" class="hint">Click a panel to select it, then drag to move the photo and scroll to zoom.</p>
+    <div class="top-actions">
+      <label class="btn" for="fileInput">Add photos</label>
+      <input id="fileInput" type="file" accept="image/*" multiple hidden>
+      <button class="btn" id="loadSamplesBtn" type="button">Load sample photos</button>
+      <button class="btn" id="fillAllBtn" type="button">Fill all panels</button>
     </div>
-    <div class="tray" id="tray" aria-label="Your photos"></div>
-    <p class="tray-empty" id="tray-empty">No photos yet — add your own, or load the sample photos to try it out.</p>
-  </section>
+  </header>
 
-  <aside class="controls">
-    <section class="group">
-      <h2>1 · Layout</h2>
-      <div class="seg" id="layout-seg" role="group" aria-label="Panel layout">
-        <button type="button" data-layout="hero" class="active">Hero + 2</button>
-        <button type="button" data-layout="strips">3 strips</button>
-        <button type="button" data-layout="grid">2 × 2 grid</button>
-        <button type="button" data-layout="single">Single</button>
+  <main class="layout">
+    <section class="preview-col">
+      <div class="canvas-wrap">
+        <canvas id="previewCanvas" width="960" height="540"></canvas>
       </div>
-      <p class="note">Panels keep their own photo, crop and zoom.</p>
+      <p class="hint">Click a panel to select it, then drag to move the photo and scroll to zoom.</p>
+      <div class="tray" id="tray"></div>
+      <p class="empty-tray" id="emptyTray">No photos yet — add your own, or load the samples to try it out.</p>
     </section>
 
-    <section class="group">
-      <h2>2 · Caption</h2>
-      <label class="field">
-        <span>Title</span>
-        <input id="caption-input" type="text" value="NEON SUNSET" maxlength="24" autocomplete="off">
-      </label>
-      <label class="field">
-        <span>Tagline</span>
-        <input id="tagline-input" type="text" value="A SUNSET STORY IN NEON" maxlength="48" autocomplete="off">
-      </label>
-      <label class="field">
-        <span>Title size <output id="size-out">100%</output></span>
-        <input id="size-range" type="range" min="60" max="160" value="100">
-      </label>
-      <div class="seg" id="lettering-seg" role="group" aria-label="Lettering style">
-        <button type="button" data-lettering="block" class="active">Block</button>
-        <button type="button" data-lettering="outline">Outline</button>
-        <button type="button" data-lettering="neon">Neon</button>
-        <button type="button" data-lettering="chrome">Chrome</button>
-      </div>
-    </section>
+    <aside class="sidebar">
+      <section class="group">
+        <h2><span class="num">1</span> Layout</h2>
+        <div class="seg" id="layoutSeg">
+          <button type="button" data-layout="hero" class="active">Hero + 2</button>
+          <button type="button" data-layout="strips">3 strips</button>
+          <button type="button" data-layout="grid">2 × 2 grid</button>
+          <button type="button" data-layout="single">Single</button>
+        </div>
+        <p class="note">Panels keep their own photo, crop and zoom.</p>
+      </section>
 
-    <section class="group">
-      <h2>3 · Colour grade</h2>
-      <div class="seg" id="grade-seg" role="group" aria-label="Colour grade">
-        <button type="button" data-grade="sunset" class="active">Sunset</button>
-        <button type="button" data-grade="neon">Neon</button>
-        <button type="button" data-grade="vice">Vice City</button>
-        <button type="button" data-grade="noir">Noir</button>
-      </div>
-      <p class="note">The grade tints every panel and the caption band.</p>
-    </section>
+      <section class="group">
+        <h2><span class="num">2</span> Caption</h2>
+        <label class="field">
+          <span>Title</span>
+          <input id="titleInput" type="text" value="NEON SUNSET" maxlength="24">
+        </label>
+        <label class="field">
+          <span>Tagline</span>
+          <input id="taglineInput" type="text" value="A SUNSET STORY IN NEON" maxlength="48">
+        </label>
+        <label class="field">
+          <span>Title size <output id="titleSizeVal">100%</output></span>
+          <input id="titleSize" type="range" min="60" max="160" value="100">
+        </label>
+        <div class="seg" id="letteringSeg">
+          <button type="button" data-lettering="block" class="active">Block</button>
+          <button type="button" data-lettering="outline">Outline</button>
+          <button type="button" data-lettering="neon">Neon</button>
+          <button type="button" data-lettering="chrome">Chrome</button>
+        </div>
+      </section>
 
-    <section class="group">
-      <h2>4 · Selected panel</h2>
-      <p class="note" id="selected-label">Panel 1 of 3 — no photo yet.</p>
-      <label class="field">
-        <span>Zoom <output id="zoom-out">100%</output></span>
-        <input id="zoom-range" type="range" min="100" max="300" value="100">
-      </label>
-      <div class="row">
-        <button id="fit-btn" class="btn" type="button">Reset crop</button>
-        <button id="clear-btn" class="btn" type="button">Remove photo</button>
-      </div>
-    </section>
+      <section class="group">
+        <h2><span class="num">3</span> Colour grade</h2>
+        <div class="seg" id="gradeSeg">
+          <button type="button" data-grade="sunset" class="active">Sunset</button>
+          <button type="button" data-grade="neon">Neon</button>
+          <button type="button" data-grade="vice">Vice City</button>
+          <button type="button" data-grade="noir">Noir</button>
+        </div>
+        <p class="note">The grade tints every panel and the caption band.</p>
+      </section>
 
-    <section class="group export">
-      <h2>5 · Export</h2>
-      <label class="field">
-        <span>Size</span>
-        <select id="size-select">
-          <option value="1920x1080" selected>1920 × 1080 — landscape post</option>
-          <option value="1080x1080">1080 × 1080 — square post</option>
-          <option value="1080x1350">1080 × 1350 — portrait post</option>
-        </select>
-      </label>
-      <button id="export-btn" class="btn btn-primary btn-big" type="button">Export PNG</button>
-      <p class="note">Renders at full resolution, straight from the canvas.</p>
-      <p class="note">Shortcuts: Ctrl/Cmd+E exports, keys 1–4 switch the colour grade.</p>
-    </section>
-  </aside>
-</main>
+      <section class="group">
+        <h2><span class="num">4</span> Selected panel</h2>
+        <p class="status" id="panelStatus">Panel 1 of 3 — no photo yet.</p>
+        <label class="field">
+          <span>Zoom <output id="zoomVal">100%</output></span>
+          <input id="zoomSlider" type="range" min="100" max="300" value="100">
+        </label>
+        <div class="row">
+          <button class="btn" id="resetCropBtn" type="button">Reset crop</button>
+          <button class="btn" id="removePhotoBtn" type="button">Remove photo</button>
+        </div>
+      </section>
 
-<footer class="foot">
-  <p>Fan-made cover tool. Not affiliated with Rockstar Games. No photos are uploaded anywhere.</p>
-</footer>
+      <section class="group export-group">
+        <h2><span class="num">5</span> Export</h2>
+        <label class="field">
+          <span>Size</span>
+          <select id="sizeSelect">
+            <option value="1920x1080" selected>1920 × 1080 · landscape post</option>
+            <option value="1080x1080">1080 × 1080 · square post</option>
+            <option value="1080x1350">1080 × 1350 · portrait post</option>
+          </select>
+        </label>
+        <button class="btn primary big" id="exportBtn" type="button">Export PNG</button>
+        <p class="note">Renders at full resolution straight from the canvas.</p>
+        <p class="note">Ctrl/Cmd+E exports · keys 1–4 switch the colour grade.</p>
+      </section>
+    </aside>
+  </main>
 
-<script src="src/app.js"></script>
+  <footer>
+    A fan-made toy, not affiliated with Rockstar Games. No photos are uploaded anywhere — everything runs in your browser.
+  </footer>
+
+  <script src="src/app.js"></script>
 </body>
 </html>
